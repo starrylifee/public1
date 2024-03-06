@@ -6,13 +6,9 @@ import toml
 from PIL import Image
 import io
 
-
-from IPython.display import display
-from IPython.display import Markdown
-
 def to_markdown(text):
-  text = text.replace('•', ' *')
-  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+    text = text.replace('•', '*')
+    return textwrap.indent(text, '> ', predicate=lambda _: True)
 
 # secrets.toml 파일 경로
 secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
