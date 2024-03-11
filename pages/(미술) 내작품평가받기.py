@@ -18,10 +18,10 @@ with open(secrets_path, "r") as f:
     secrets = toml.load(f)
 
 # secrets.toml 파일에서 gemini_api_key1 값 가져오기
-gemini_api_key1 = secrets["gemini_api_key1"]
+gemini_api_key2 = secrets["gemini_api_key2"]
 
 # Gemini API 키 설정
-genai.configure(api_key=gemini_api_key1)
+genai.configure(api_key=gemini_api_key2)
 
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")
