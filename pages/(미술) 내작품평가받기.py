@@ -37,7 +37,7 @@ if uploaded_file is not None:
   model = genai.GenerativeModel('gemini-pro-vision')
 
   # Generate content
-  response = model.generate_content(["이 사진은 초등학생이 직접 그린 미술 작품입니다. 그린 작품을 자세히 설명해주세요. 장점을 여러개 말해주고, 보완할 점 1가지를 학생이 상처받지 않도록 온화한 화법으로 말해주세요.", img])
+  response = model.generate_content(["이 사진은 초등학생이 직접 그린 미술 작품입니다. 그림 이름을 추천해주고, 그린 작품을 자세히 설명해주세요. 장점을 여러개 말해주고, 보완할 점 1가지를 학생이 상처받지 않도록 온화한 화법으로 말해주세요.", img])
 
   # Resolve the response
   response.resolve()
