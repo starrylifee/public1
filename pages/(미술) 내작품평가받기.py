@@ -38,7 +38,8 @@ def try_generate_content(api_key, image):
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")
 
-# 이미지가 업로드되었는지 확인
+# 이미지가 업로드되었는지 확인git init
+
 if uploaded_file is not None:
     # 이미지 바이트 문자열로 변환
     img_bytes = uploaded_file.read()
