@@ -18,10 +18,10 @@ with open(secrets_path, "r") as f:
     secrets = toml.load(f)
 
 # secrets.toml 파일에서 gemini_api_key1 값 가져오기
-gemini_api_key2 = secrets["gemini_api_key2"]
+gemini_api_key1 = secrets["gemini_api_key1"]
 
 # Gemini API 키 설정
-genai.configure(api_key=gemini_api_key2)
+genai.configure(api_key=gemini_api_key1)
 
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")
@@ -37,7 +37,7 @@ if uploaded_file is not None:
   model = genai.GenerativeModel('gemini-pro-vision')
 
   # Generate content
-  response = model.generate_content(["이 사진은 초등학생이 직접 그린 미술 작품입니다. 그림 이름을 추천해주고, 그린 작품을 자세히 설명해주세요. 장점을 여러개 말해주고, 보완할 점 1가지를 학생이 상처받지 않도록 온화한 화법으로 말해주세요.", img])
+  response = model.generate_content(["이 사진은 동물의 사진입니다. 동물의 이름을 최대한 추측해서 판별해주세요. 동물의 모습과 습성, 서식지 등을 학생에게 설명하듯이 자세히 한글로 설명해 주세요.", img])
 
   # Resolve the response
   response.resolve()
