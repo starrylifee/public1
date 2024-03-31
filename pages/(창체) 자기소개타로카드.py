@@ -65,7 +65,7 @@ if password == correct_password:
                                     mime="image/jpeg")
                 break  # 이미지 생성 성공 시 반복 종료
             except Exception as e:
-                st.error(f"{api_key} 사용 중 오류 발생. 다른 키를 시도합니다: " + str(e))
+                st.error("현재 사용 중인 키로 오류가 발생했습니다." + str(e))
                 continue  # 다음 키로 시도
     else:
         st.warning("모든 필드를 채워주세요!")
