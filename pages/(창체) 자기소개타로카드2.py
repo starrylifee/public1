@@ -30,7 +30,7 @@ if password == correct_password:
 
     if generate_button and all([name, gender, likes_items, likes_people, aspiration, want_to_do, favorite_food, favorite_country]):
         # API 키 리스트
-        api_keys = [st.secrets["api_key7"], st.secrets["api_key8"], st.secrets["api_key9"], st.secrets["api_key10"], st.secrets["api_key11"], st.secrets["api_key12"]]
+        api_keys = [st.secrets["api_key1"], st.secrets["api_key2"], st.secrets["api_key3"], st.secrets["api_key4"], st.secrets["api_key5"], st.secrets["api_key6"]]
 
         # 이미지 생성 프롬프트
         prompt = f"{gender} 아이의 중앙 일러스트레이션과 주변에 좋아하는 물건({likes_items}), 좋아하는 사람({likes_people}), 장래 희망({aspiration}), 지금 하고 싶은 것({want_to_do}), 좋아하는 음식({favorite_food}), 좋아하는 나라({favorite_country})을 둘러싼 타로 카드 디자인. 카드 하단에 '{name}'이라는 이름이 크게 표시됩니다."
