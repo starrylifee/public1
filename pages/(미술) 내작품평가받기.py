@@ -10,6 +10,17 @@ def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
+# 사용방법 안내
+st.title("그림 분석 앱")
+st.write("""
+1. "Browse files"를 클릭합니다.
+2. 카메라를 선택하고, 사진을 가로로 찍습니다.
+3. 사진이 업로드가 자동으로 됩니다.
+4. Running이 끝나면 인공지능이 여러분의 그림을 보고 이야기해줍니다.
+5. 인공지능의 반응을 살펴봅시다.
+6. 결과와 이미지를 다운로드 해 봅시다.
+""")
+
 # secrets.toml 파일 경로
 secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
 
