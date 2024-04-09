@@ -44,6 +44,24 @@ if uploaded_file is not None:
 
   # 결과 표시
   st.image(img) # 업로드된 사진 출력
-  st.markdown(response.text)
+  result_text = response.text  # 결과 텍스트
+  st.markdown(result_text)
+
+  # 텍스트 결과를 다운로드 가능한 텍스트 파일로 제공
+  txt_to_download = result_text.encode('utf-8')
+  st.download_button(label="결과를 다운로드하세요.",
+                     data=txt_to_download,
+                     file_name="artwork_analysis.txt",
+                     mime='text/plain')
+
+  # 이미지 다운로드
+  img_bytes_io = io.BytesIO()
+  img.save(img_bytes_io, format='JPEG')
+  img_bytes_io.seek(0)
+  st.download_button(label="이미지 다운로드",
+                     data=img_bytes_io,
+                     file_name="uploaded_image.jpg",
+                     mime="image/jpeg")
+
 else:
   st.markdown("핸드폰 사진을 업로드하세요.")
