@@ -11,7 +11,7 @@ def to_markdown(text):
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
 # 사용방법 안내
-st.title("그림 분석 앱")
+st.title("인공지능씨, 내 작품 어때요?")
 st.write("""
 1. "Browse files"를 클릭합니다.
 2. 카메라를 선택하고, 사진을 가로로 찍습니다.
