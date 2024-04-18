@@ -6,6 +6,7 @@ import toml
 from PIL import Image
 import io
 from openai import OpenAI
+import random
 
 def to_markdown(text):
     text = text.replace('•', '*')
@@ -32,15 +33,13 @@ api_keys = [
     secrets.get("api_key12")
 ]
 
-# API 키를 사용하여 OpenAI 클라이언트 초기화 및 이미지 생성 시도
-for api_key in api_keys:
-    try:
-        # OpenAI 클라이언트 초기화
-        client = OpenAI(api_key=api_key)
-        break  # 첫 번째 유효한 API 키로 성공적으로 클라이언트가 초기화되면 반복 종료
-    except Exception as e:
-        st.error(f"API 키 {api_key}로 요청 실패: {e}")
-        continue  # 다음 API 키로 시도
+# 랜덤하게 API 키를 선택하여 OpenAI 클라이언트 초기화
+selected_api_key = random.choice(api_keys)
+try:
+    client = OpenAI(api_key=selected_api_key)
+except Exception as e:
+    st.error(f"선택된 API 키 {selected_api_key}로 요청 실패: {e}")
+
 
 # generativeai 함수 설정
 def try_generate_text_content(api_key, prompt_parts):
