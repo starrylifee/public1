@@ -111,41 +111,41 @@ if uploaded_file is not None:
         initial_image_analysis_text = response.text  # response.text를 변수에 저장
         st.markdown(response.text)
 
-        # 이미지 생성 버튼 클릭 시 실행되는 코드 블록
-        if st.button("이미지 생성"):
-            try:
-                # 생물이 살았던 일상을 묘사하는 새로운 프롬프트 생성
-                new_prompt = f"다음 정보를 바탕으로, 이 생물이 살았던 일상적인 모습을 상상하고 묘사해주세요: {initial_image_analysis_text}"
+        # # 이미지 생성 버튼 클릭 시 실행되는 코드 블록
+        # if st.button("이미지 생성"):
+        #     try:
+        #         # 생물이 살았던 일상을 묘사하는 새로운 프롬프트 생성
+        #         new_prompt = f"다음 정보를 바탕으로, 이 생물이 살았던 일상적인 모습을 상상하고 묘사해주세요: {initial_image_analysis_text}"
                 
-                # 새로운 프롬프트를 사용하여 텍스트 생성
-                response_text = try_generate_text_content(gemini_api_key1, [new_prompt])
+        #         # 새로운 프롬프트를 사용하여 텍스트 생성
+        #         response_text = try_generate_text_content(gemini_api_key1, [new_prompt])
                 
-                # 첫 번째 API 키 실패 시, 두 번째 API 키로 재시도
-                if response_text is None and gemini_api_key2 is not None:
-                    print("첫 번째 API 호출에 실패하여 두 번째 API 키로 재시도합니다.")
-                    response_text = try_generate_text_content(gemini_api_key2, [new_prompt])
+        #         # 첫 번째 API 키 실패 시, 두 번째 API 키로 재시도
+        #         if response_text is None and gemini_api_key2 is not None:
+        #             print("첫 번째 API 호출에 실패하여 두 번째 API 키로 재시도합니다.")
+        #             response_text = try_generate_text_content(gemini_api_key2, [new_prompt])
                 
-                # 생성된 텍스트를 기반으로 이미지 생성
-                if response_text is not None:
-                    generated_living_scene_text = response_text
-                    #st.markdown(to_markdown(generated_living_scene_text))   숨기기
+        #         # 생성된 텍스트를 기반으로 이미지 생성
+        #         if response_text is not None:
+        #             generated_living_scene_text = response_text
+        #             #st.markdown(to_markdown(generated_living_scene_text))   숨기기
 
-                    # DALL·E를 사용하여 이미지 생성 요청
-                    image_response = client.images.generate(
-                        model="dall-e-3",
-                        prompt=generated_living_scene_text,
-                        size="1024x1024",
-                        quality="standard",
-                        n=1,
-                    )
-                    # 생성된 이미지 URL 추출 및 표시
-                    generated_image_url = image_response.data[0].url
-                    st.image(generated_image_url, caption="Generated Image")
+        #             # DALL·E를 사용하여 이미지 생성 요청
+        #             image_response = client.images.generate(
+        #                 model="dall-e-3",
+        #                 prompt=generated_living_scene_text,
+        #                 size="1024x1024",
+        #                 quality="standard",
+        #                 n=1,
+        #             )
+        #             # 생성된 이미지 URL 추출 및 표시
+        #             generated_image_url = image_response.data[0].url
+        #             st.image(generated_image_url, caption="Generated Image")
                 
-                else:
-                    st.error("텍스트 생성에 실패했습니다. API 호출에 문제가 있습니다.")
-            except Exception as e:
-                st.error(f"이미지 생성 중 오류가 발생했습니다: {e}")
+        #         else:
+        #             st.error("텍스트 생성에 실패했습니다. API 호출에 문제가 있습니다.")
+        #     except Exception as e:
+        #         st.error(f"이미지 생성 중 오류가 발생했습니다: {e}")
 
     else:
         st.markdown("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
