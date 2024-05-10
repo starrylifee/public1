@@ -28,20 +28,14 @@ def main():
 
     with st.sidebar:
         assistant_id = st.text_input("Assistant ID를 입력하세요")
-        api_keys = st.text_input("Openai API key를 입력하세요")
+        api_key = st.text_input("Openai API key를 입력하세요")
         thread_btn = st.button("대화 시작")
 
     client = None
-    for index, api_key in enumerate(api_keys):
-        try:
-            client = OpenAI(api_key=api_key)
-            break
-        except Exception as e:
-            st.error(f"API 키 {index + 7} 실패: {str(e)}")
-            continue
-
-    if not client:
-        st.error("모든 API 키가 실패했습니다.")
+    try:
+        client = OpenAI(api_key=api_key)
+    except Exception as e:
+        st.error("API 키 오류: " + str(e))
         st.stop()
 
     if thread_btn:
@@ -56,7 +50,7 @@ def main():
     st.divider()
 
     thread_id = st.session_state.thread_id
-    st.title("중고등학교 학생생활규정 보조 챗봇")
+    st.title("AI융합수교멘토운영안내 보조 챗봇")
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
