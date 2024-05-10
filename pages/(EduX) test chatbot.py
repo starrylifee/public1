@@ -27,8 +27,8 @@ def main():
         st.session_state.initialized = True
 
     with st.sidebar:
-        assistant_id = st.text_input("Assistant ID를 입력하세요")
-        api_key = st.text_input("Openai API key를 입력하세요")
+        assistant_id = st.text_input("Assistant ID를 입력하세요", type='password')
+        api_key = st.text_input("Openai API key를 입력하세요", type='password')
         thread_btn = st.button("대화 시작")
 
     client = None
