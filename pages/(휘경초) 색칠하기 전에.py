@@ -12,7 +12,7 @@ def to_markdown(text):
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
 # 사용방법 안내
-st.title("🎨 인공지능씨, 내 스케치 어때요? 🎨")
+st.title("🎨 인공지능씨, 내 스케치 어때요?")
 st.write("""
 1. 📜 주제를 입력하세요.
 2. 📂 "Browse files"를 클릭합니다.
@@ -59,6 +59,7 @@ except Exception as e:
 if st.button("🔄 새로 시작하기 (눌러주세요!)"):
     st.session_state.clear()
     st.experimental_rerun()
+
 
 # 그림 주제 입력
 subject = st.text_input("그림 주제를 입력하세요:", "")
