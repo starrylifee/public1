@@ -75,7 +75,7 @@ weight = st.number_input("몸무게 (kg)", min_value=20, max_value=100, step=1)
 age = st.number_input("나이 (세)", min_value=6, max_value=20, step=1)
 gender = st.selectbox("성별", ["남자", "여자"])
 activity_level = st.selectbox("활동 수준", ["낮음", "보통", "높음"])
-health_condition = st.selectbox("건강 상태", ["건강함", "천식", "알레르기", "과체중", "저체중", "당뇨병"])
+health_condition = st.selectbox("건강 상태", ["해당없음", "천식", "알레르기", "과체중", "저체중", "당뇨병"])
 
 # 입력 값 검증 및 인공지능 호출
 if st.button("운동 추천 받기"):
