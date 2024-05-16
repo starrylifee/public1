@@ -77,13 +77,13 @@ if uploaded_file is not None:
             # Google Generative AI를 사용하여 이미지 묘사 생성
             model = genai.GenerativeModel('gemini-pro-vision')
             response = model.generate_content([
-                "이 사진을 자세히 묘사해주세요. 성별, 헤어스타일, 눈코입, 옷의 종류, 옷의 색깔, 옷의 무즤, 악세서리, 표정, 피부색, 얼굴형, 나이, 머리카락 길이, 눈색깔, 머리색깔 등을 다양한 수식어가 포함된 최대한 자세한 표현으로 이야기해주세요.", 
+                "이 사진을 자세히 묘사해주세요. 성별, 헤어스타일, 눈코입, 옷의 종류, 옷의 색깔, 옷의 무즤, 악세서리, 표정, 피부색, 얼굴형, 나이, 머리카락 길이, 눈색깔, 머리색깔 등을 다양한 수식어가 포함된 최대한 자세한 표현으로 이야기해주세요. 초등학생이 사용할 것이므로 성적인 묘사는 하지 말아주세요.", 
                 img
             ])
             response.resolve()
             ai_description = response.text
             st.write("AI가 생성한 이미지 묘사: ", ai_description)
-            st.markdown("<h2 style='color:red; font-weight:bold;'>오른쪽 위 'Running'이 없어질 때까지 기다려 주세요. 묘사를 생성 중입니다...</h2>", unsafe_allow_html=True)
+            st.markdown("<h2 style='color:red; font-weight:bold;'>오른쪽 위 'Running'이 없어질 때까지 기다려 주세요.</h2>", unsafe_allow_html=True)
             # 최종 묘사 생성
             final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}"
 
