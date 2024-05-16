@@ -52,7 +52,7 @@ selected_api_key = random.choice(api_keys)
 try:
     genai.configure(api_key=selected_api_key)
 except Exception as e:
-    st.error(f"선택된 API 키 {selected_api_key}로 요청 실패: {e}")
+    st.error(f"선택된 API 키로 요청 실패: {e}")
 
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")

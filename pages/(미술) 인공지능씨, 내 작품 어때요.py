@@ -5,6 +5,7 @@ import streamlit as st
 import toml
 from PIL import Image
 import io
+import random
 
 def to_markdown(text):
     text = text.replace('•', '*')
@@ -28,11 +29,28 @@ secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
 with open(secrets_path, "r") as f:
     secrets = toml.load(f)
 
-# secrets.toml 파일에서 gemini_api_key1 값 가져오기
-gemini_api_key2 = secrets["gemini_api_key2"]
+# secrets.toml 파일에서 여러 API 키 값 가져오기
+api_keys = [
+    secrets.get("gemini_api_key1"),
+    secrets.get("gemini_api_key2"),
+    secrets.get("gemini_api_key3"),
+    secrets.get("gemini_api_key4"),
+    secrets.get("gemini_api_key5"),
+    secrets.get("gemini_api_key6"),
+    secrets.get("gemini_api_key7"),
+    secrets.get("gemini_api_key8"),
+    secrets.get("gemini_api_key9"),
+    secrets.get("gemini_api_key10"),
+    secrets.get("gemini_api_key11"),
+    secrets.get("gemini_api_key12")
+]
 
-# Gemini API 키 설정
-genai.configure(api_key=gemini_api_key2)
+# 랜덤하게 API 키를 선택하여 OpenAI 클라이언트 초기화
+selected_api_key = random.choice(api_keys)
+try:
+    genai.configure(api_key=selected_api_key)
+except Exception as e:
+    st.error(f"선택된 API 키로 요청 실패: {e}")
 
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")
