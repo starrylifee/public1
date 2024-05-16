@@ -85,7 +85,7 @@ if uploaded_file is not None:
             st.write("AI가 생성한 이미지 묘사: ", ai_description)
             st.markdown("<h2 style='color:red; font-weight:bold;'>오른쪽 위 'Running'이 없어질 때까지 기다려 주세요.</h2>", unsafe_allow_html=True)
             # 최종 묘사 생성
-            final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}"
+            final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}. 귀엽게 그려주세요."
 
             # OpenAI API를 호출하여 이미지 생성
             image_response = client.images.generate(
