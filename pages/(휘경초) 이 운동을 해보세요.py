@@ -79,7 +79,7 @@ health_condition = st.selectbox("건강 상태", ["건강함", "천식", "알레
 
 # 입력 값 검증 및 인공지능 호출
 if st.button("운동 추천 받기"):
-    if not all([height, weight, age, gender, activity_level, health_condition, exercise_preference]):
+    if not all([height, weight, age, gender, activity_level, health_condition]):
         st.warning("모든 입력 필드를 채워주세요!")
     else:
         # 프롬프트 구성
