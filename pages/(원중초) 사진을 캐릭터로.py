@@ -48,6 +48,18 @@ genai_api_keys = [
 selected_genai_api_key = random.choice(genai_api_keys)
 genai.configure(api_key=selected_genai_api_key)
 
+# 사용방법 안내
+st.title("🎨 사진을 캐릭터로 ")
+st.write("""
+1. 📂 "Browse files"를 클릭하여 사진을 업로드하세요.
+2. ✍️ 사진에 대한 추가 묘사를 입력하세요.
+3. ⏳ '묘사 생성 및 캐리커쳐 생성' 버튼을 클릭하고 오른쪽 위 'Running'이 없어질 때까지 기다려 주세요.
+4. 💬 인공지능이 사진을 묘사하고, 그 묘사를 기반으로 캐리커쳐를 생성합니다.
+5. 📥 결과와 이미지를 다운로드 해 봅시다.
+""")
+
+st.write("📢 이 앱은 원중초등학교 4학년 1반 마예림, 채의준 학생의 아이디어로 만들어졌습니다. 🎉👏")
+
 # 업로드된 이미지 처리
 uploaded_file = st.file_uploader("📱 핸드폰 사진 업로드")
 
@@ -65,16 +77,15 @@ if uploaded_file is not None:
             # Google Generative AI를 사용하여 이미지 묘사 생성
             model = genai.GenerativeModel('gemini-pro-vision')
             response = model.generate_content([
-                "이 사진을 자세히 묘사해주세요. 성별, 헤어스타일, 눈코입, 옷, 악세서리, 표정, 피부색, 얼굴형, 나이, 머리카락 길이, 눈색깔, 머리색깔 등을 자세한 표현으로 이야기해주세요.", 
+                "이 사진을 자세히 묘사해주세요. 성별, 헤어스타일, 눈코입, 옷의 종류, 옷의 색깔, 옷의 무즤, 악세서리, 표정, 피부색, 얼굴형, 나이, 머리카락 길이, 눈색깔, 머리색깔 등을 다양한 수식어가 포함된 최대한 자세한 표현으로 이야기해주세요.", 
                 img
             ])
             response.resolve()
             ai_description = response.text
             st.write("AI가 생성한 이미지 묘사: ", ai_description)
-            st.write("오른쪽 위 'Running'이 없어질 때까지 기다려 주세요")
+            st.markdown("<h2 style='color:red; font-weight:bold;'>오른쪽 위 'Running'이 없어질 때까지 기다려 주세요. 묘사를 생성 중입니다...</h2>", unsafe_allow_html=True)
             # 최종 묘사 생성
             final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}"
-            st.write("최종 묘사: ", final_description)
 
             # OpenAI API를 호출하여 이미지 생성
             image_response = client.images.generate(
