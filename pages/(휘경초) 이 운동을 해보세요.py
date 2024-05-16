@@ -60,7 +60,7 @@ def try_generate_content(api_key, prompt_parts):
         return None
 
 # 스트림릿 앱 인터페이스 구성
-st.title("🏃‍♂️ 인공지능씨, 어떤 운동이 좋을까요? 🏃‍♀️")
+st.title("🏃‍♂️ 이 운동을 해보세요! 🏃‍♀️")
 st.write("""
 1. 📝 아래의 입력 필드에 키, 몸무게, 나이, 성별, 활동 수준, 건강 상태, 운동 선호도를 입력하세요.
 2. 🏋️‍♂️ 모든 입력을 완료한 후 "운동 추천 받기" 버튼을 클릭하세요.
@@ -76,7 +76,6 @@ age = st.number_input("나이 (세)", min_value=6, max_value=20, step=1)
 gender = st.selectbox("성별", ["남자", "여자"])
 activity_level = st.selectbox("활동 수준", ["낮음", "보통", "높음"])
 health_condition = st.selectbox("건강 상태", ["건강함", "천식", "알레르기", "과체중", "저체중", "당뇨병"])
-exercise_preference = st.selectbox("운동 선호도", ["축구", "수영", "농구", "자전거 타기", "달리기", "요가", "배드민턴", "태권도"])
 
 # 입력 값 검증 및 인공지능 호출
 if st.button("운동 추천 받기"):
@@ -86,7 +85,7 @@ if st.button("운동 추천 받기"):
         # 프롬프트 구성
         prompt_parts = [
             "아래는 초등학생에게 적합한 운동을 추천하는 예시입니다.\n입력은 키, 몸무게, 나이, 성별, 활동 수준, 건강 상태, 운동 선호도입니다.\n출력은 추천 운동입니다.\n\n입력을 확인하고 적합한 운동을 추천해주세요. 추천하는 이유도 적어주세요.",
-            f"키: {height} cm, 몸무게: {weight} kg, 나이: {age} 세, 성별: {gender}, 활동 수준: {activity_level}, 건강 상태: {health_condition}, 운동 선호도: {exercise_preference}",
+            f"키: {height} cm, 몸무게: {weight} kg, 나이: {age} 세, 성별: {gender}, 활동 수준: {activity_level}, 건강 상태: {health_condition}",
             "추천 운동: "
         ]
 
