@@ -60,7 +60,7 @@ def try_generate_content(api_key, prompt_parts):
         return None
 
 # 스트림릿 앱 인터페이스 구성
-st.title("💌 타인의 마음을 고려한 편지 쓰기 💌")
+st.title("💌 너에게 사과하고 싶어 💌")
 st.write("""
 1. 📝 아래의 질문에 답을 작성하세요.
 2. 📤 모든 답변을 완료한 후 "편지 생성하기" 버튼을 클릭하세요.
