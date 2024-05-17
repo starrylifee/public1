@@ -68,10 +68,12 @@ st.write("""
 4. 📥 결과를 다운로드하거나, 편지를 수정하여 사용할 수 있습니다.
 """)
 
-st.write("📢 이 앱은 원중초등학교 4학년 1반 장서현 학생의 아이디어로 만들어졌습니다. 🎉👏")
+st.write("📢 이 앱은 서울휘경초등학교 3학년 학생들의 아이디어로 만들어졌습니다. 🎉👏")
+
+st.markdown("### 아래 질문은 회복적 질문을 바탕으로 한 질문입니다.")
 
 # 입력 필드
-incident = st.text_area("1. 무슨일이 있었나요?")
+incident = st.text_area("1. 무슨 일이 있었나요?")
 reason = st.text_area("2. 왜 이런 일이 일어났다고 생각하나요?")
 thoughts = st.text_area("3. 그때 어떤 생각으로 그런 행동을 했나요?")
 harm = st.text_area("4. 다른 사람에게 어떤 피해가 있었나요?")
@@ -89,10 +91,10 @@ if st.button("편지 생성하기"):
         # 프롬프트 구성
         prompt_parts = [
             "다음 질문들에 대한 답변을 바탕으로 타인의 마음을 고려한 편지를 작성해주세요.\n\n",
-            f"1. 무슨일이 있었나요? {incident}",
+            f"1. 무슨 일이 있었나요? {incident}",
             f"2. 왜 이런 일이 일어났다고 생각하나요? {reason}",
             f"3. 그때 어떤 생각으로 그런 행동을 했나요? {thoughts}",
-            f"4. 다른 사람에게 어떤 피해가 있었나요? {harm}",
+            f"4. 그 사람에게 어떤 피해가 있었나요? {harm}",
             f"5. 어떻게 하면 발생한 피해가 회복될 수 있을까요? {recovery}",
             f"6. 무엇을 하는 것이 이 상황을 좀 더 좋게 만들 수 있을까요? {improvements}",
             f"7. 내가 할 수 있는 일은 무엇인가요? {actions}",
@@ -117,6 +119,7 @@ if st.button("편지 생성하기"):
             st.success("편지 생성 완료!")
             st.text_area("생성된 편지:", value=response_text, height=300)
             st.download_button(label="편지 다운로드", data=response_text, file_name="generated_letter.txt", mime="text/plain")
+            st.write("인공지능이 생성한 편지는 꼭 본인이 확인해야 합니다. 생성된 편지를 검토하고, 필요한 경우 수정하세요.")
         else:
             st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
