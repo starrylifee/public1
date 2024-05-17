@@ -27,7 +27,7 @@ api_keys = [
 selected_api_key = random.choice(api_keys)
 
 # 사용방법 안내
-st.title("🎨 종이인형 옷 만들기")
+st.title("🎨 종이 인형 옷 생성기")
 st.write("""
 1. 📜 옷 종류, 색상, 패턴, 악세서리 등을 선택하세요.
 2. 📤 모든 옵션을 선택한 후 "종이 인형 옷 생성" 버튼을 클릭하세요.
@@ -65,10 +65,10 @@ if generate_button:
     # 선택된 옵션을 기반으로 프롬프트 생성
     accessories_str = ", ".join(accessories)
     prompt = (
-        f"A paper doll outfit of type {outfit_type} in {color} color with {pattern} pattern, "
-        f"made from {fabric} fabric, decorated with {accessories_str}. "
-        f"The outfit is suitable for {season} and follows a {theme} theme. "
-        f"The style of the outfit is {style}. The outfit should have tabs for attachment to a paper doll."
+        f"A paper doll outfit designed for {season} season, following a {theme} theme. "
+        f"The outfit is a {outfit_type} made from {fabric} fabric, in {color} color with a {pattern} pattern. "
+        f"It is decorated with {accessories_str} and follows a {style} style. "
+        f"Please include tabs for attachment to a paper doll."
     )
 
     try:
@@ -85,7 +85,7 @@ if generate_button:
         )
 
         # 생성된 이미지 표시
-        generated_image_url = image_response['data'][0]['url']
+        generated_image_url = image_response.data[0].url
         st.image(generated_image_url, caption=f"{outfit_type} 옷")
 
         # 이미지 다운로드 준비
@@ -98,4 +98,4 @@ if generate_button:
                            file_name=f"{outfit_type}_outfit.png",
                            mime="image/png")
     except Exception as e:
-        st.error("현재 사용 중인 키로 오류가 발생했습니다. " + str(e))
+        st.error(f"현재 사용 중인 키로 오류가 발생했습니다: {e}")
