@@ -27,7 +27,7 @@ api_keys = [
 selected_api_key = random.choice(api_keys)
 
 # 사용방법 안내
-st.title("🎨 종이 인형 옷 생성기")
+st.title("🎨 종이인형 옷 만들기")
 st.write("""
 1. 📜 옷 종류, 색상, 패턴, 악세서리 등을 선택하세요.
 2. 📤 모든 옵션을 선택한 후 "종이 인형 옷 생성" 버튼을 클릭하세요.
@@ -76,10 +76,12 @@ if generate_button:
         client = OpenAI(api_key=selected_api_key)
 
         # OpenAI API를 호출하여 이미지 생성
-        image_response = client.Image.create(
+        image_response = client.images.generate(
+            model="dall-e-3",
             prompt=prompt,
-            n=1,
-            size="1024x1024"
+            size="1024x1024",
+            quality="standard",
+            n=1
         )
 
         # 생성된 이미지 표시
