@@ -124,9 +124,19 @@ st.write("""
 
 st.write("📢 이 앱은 창도초등학교 5학년 5반 이서현 학생의 아이디어로 만들어졌습니다. 🎉👏")
 
+# 상태 관리 변수 설정
+if 'current_season' not in st.session_state:
+    st.session_state['current_season'] = ""
+if 'current_event' not in st.session_state:
+    st.session_state['current_event'] = ""
+
 if st.button("글감 생성하기"):
     current_season = get_current_season()
     current_event = get_current_events()
+    
+    # 상태 변수에 저장
+    st.session_state['current_season'] = current_season
+    st.session_state['current_event'] = current_event
     
     if current_event:
         st.write(f"오늘은 {current_event}과(와) 가까운 날입니다! 이를 고려한 글감을 생성합니다. 오른쪽 위 'running'이 끝날 때 까지 기다리세요.")
@@ -163,4 +173,6 @@ if st.button("글감 생성하기"):
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):
+    st.session_state['current_season'] = ""
+    st.session_state['current_event'] = ""
     st.experimental_rerun()

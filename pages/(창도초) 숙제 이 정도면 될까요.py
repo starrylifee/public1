@@ -71,15 +71,25 @@ st.write("""
 
 st.write("📢 이 앱은 창도초등학교 5학년 5반 장유진 학생의 아이디어로 만들어졌습니다. 🎉👏")
 
+# 상태 관리 변수 설정
+if 'assignment' not in st.session_state:
+    st.session_state['assignment'] = ""
+if 'your_writing' not in st.session_state:
+    st.session_state['your_writing'] = ""
+
 # 입력 필드
-assignment = st.text_area("1. 선생님이 내주신 과제")
-your_writing = st.text_area("2. 내가 쓴 글")
+assignment = st.text_area("1. 선생님이 내주신 과제", value=st.session_state['assignment'])
+your_writing = st.text_area("2. 내가 쓴 글", value=st.session_state['your_writing'])
 
 # 입력 값 검증 및 인공지능 호출
 if st.button("개선 사항 생성하기"):
     if not all([assignment, your_writing]):
         st.warning("모든 입력을 작성해주세요!")
     else:
+        # 입력값을 상태 변수에 저장
+        st.session_state['assignment'] = assignment
+        st.session_state['your_writing'] = your_writing
+
         # 프롬프트 구성
         prompt_parts = [
             "다음은 선생님이 내주신 과제와 내가 쓴 글입니다. 이를 바탕으로 더 조사해야 할 점과 더 적어야 할 점을 제안해주세요.\n\n",
@@ -110,4 +120,6 @@ if st.button("개선 사항 생성하기"):
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):
+    st.session_state['assignment'] = ""
+    st.session_state['your_writing'] = ""
     st.experimental_rerun()

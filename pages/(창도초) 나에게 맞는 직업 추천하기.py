@@ -59,7 +59,7 @@ def try_generate_content(api_key, prompt_parts):
         print(f"API 호출 실패: {e}")
         return None
 
-# 스트림릿 앱 인터페이스 구성
+# Streamlit 앱 인터페이스 구성
 st.title("🔍 나에게 맞는 직업 추천하기 🔍")
 st.write("""
 1. 📋 좋아하는 활동, 성격, 자신 있는 것, 자신 없는 것, MBTI 등을 선택하세요.
@@ -68,18 +68,37 @@ st.write("""
 4. 📥 결과를 다운로드하거나, 제안을 수정하여 사용할 수 있습니다.
 """)
 
+# 상태 관리 변수 설정
+if 'activities' not in st.session_state:
+    st.session_state['activities'] = []
+if 'personality' not in st.session_state:
+    st.session_state['personality'] = ""
+if 'strengths' not in st.session_state:
+    st.session_state['strengths'] = ""
+if 'weaknesses' not in st.session_state:
+    st.session_state['weaknesses'] = ""
+if 'mbti' not in st.session_state:
+    st.session_state['mbti'] = ""
+
 # 입력 필드
-activities = st.multiselect("좋아하는 활동", ["운동", "음악 감상", "독서", "여행", "요리", "게임", "미술", "공예"])
-personality = st.selectbox("나의 성격", ["외향적", "내향적", "논리적", "감정적", "현실적", "이상적"])
-strengths = st.text_area("내가 자신 있는 것")
-weaknesses = st.text_area("내가 자신 없는 것")
-mbti = st.selectbox("MBTI", ["ESTJ", "ESFJ", "ENTJ", "ENFJ", "ISTJ", "ISFJ", "INTJ", "INFJ", "ESTP", "ESFP", "ENTP", "ENFP", "ISTP", "ISFP", "INTP", "INFP"])
+activities = st.multiselect("좋아하는 활동", ["운동", "음악 감상", "독서", "여행", "요리", "게임", "미술", "공예"], default=st.session_state['activities'])
+personality = st.selectbox("나의 성격", ["외향적", "내향적", "논리적", "감정적", "현실적", "이상적"], index=0 if st.session_state['personality'] == "" else ["외향적", "내향적", "논리적", "감정적", "현실적", "이상적"].index(st.session_state['personality']))
+strengths = st.text_area("내가 자신 있는 것", value=st.session_state['strengths'])
+weaknesses = st.text_area("내가 자신 없는 것", value=st.session_state['weaknesses'])
+mbti = st.selectbox("MBTI", ["ESTJ", "ESFJ", "ENTJ", "ENFJ", "ISTJ", "ISFJ", "INTJ", "INFJ", "ESTP", "ESFP", "ENTP", "ENFP", "ISTP", "ISFP", "INTP", "INFP"], index=0 if st.session_state['mbti'] == "" else ["ESTJ", "ESFJ", "ENTJ", "ENFJ", "ISTJ", "ISFJ", "INTJ", "INFJ", "ESTP", "ESFP", "ENTP", "ENFP", "ISTP", "ISFP", "INTP", "INFP"].index(st.session_state['mbti']))
 
 # 입력 값 검증 및 인공지능 호출
 if st.button("직업 추천 받기"):
     if not all([activities, personality, strengths, weaknesses, mbti]):
         st.warning("모든 입력을 작성해주세요!")
     else:
+        # 입력값을 상태 변수에 저장
+        st.session_state['activities'] = activities
+        st.session_state['personality'] = personality
+        st.session_state['strengths'] = strengths
+        st.session_state['weaknesses'] = weaknesses
+        st.session_state['mbti'] = mbti
+
         # 프롬프트 구성
         prompt_parts = [
             "다음은 사용자에 대한 정보입니다. 이 정보를 바탕으로 추천 직업 5개와 이유를 제안해주세요.\n\n",
@@ -113,4 +132,9 @@ if st.button("직업 추천 받기"):
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):
+    st.session_state['activities'] = []
+    st.session_state['personality'] = ""
+    st.session_state['strengths'] = ""
+    st.session_state['weaknesses'] = ""
+    st.session_state['mbti'] = ""
     st.experimental_rerun()
