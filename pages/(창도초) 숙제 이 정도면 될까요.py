@@ -60,7 +60,7 @@ def try_generate_content(api_key, prompt_parts):
         return None
 
 # 스트림릿 앱 인터페이스 구성
-st.title("📚 과제 개선 도우미 📚")
+st.title("📚 숙제 이 정도면 될까요? 📚")
 st.write("""
 1. 📝 선생님이 내주신 과제를 입력하세요.
 2. 📝 본인이 작성한 글을 입력하세요.
@@ -68,6 +68,8 @@ st.write("""
 4. 💬 인공지능이 여러분의 입력을 바탕으로 더 조사해야 할 점과 더 적어야 할 점을 제안해줍니다.
 5. 📥 결과를 다운로드하거나, 제안을 수정하여 사용할 수 있습니다.
 """)
+
+st.write("📢 이 앱은 창도초등학교 5학년 5반 장유진 학생의 아이디어로 만들어졌습니다. 🎉👏")
 
 # 입력 필드
 assignment = st.text_area("1. 선생님이 내주신 과제")
@@ -102,7 +104,7 @@ if st.button("개선 사항 생성하기"):
             st.success("개선 사항 생성 완료!")
             st.text_area("생성된 개선 사항:", value=response_text, height=300)
             st.download_button(label="개선 사항 다운로드", data=response_text, file_name="improvement_suggestions.txt", mime="text/plain")
-            st.write("인공지능이 생성한 제안은 꼭 본인이 확인해야 합니다. 생성된 제안을 검토하고, 필요한 경우 수정하세요.")
+            st.write("인공지능이 생성한 제안은 꼭 본인이 확인해야 합니다. 생성된 제안을 검토하고, 필요한 경우에만 수정하세요.")
         else:
             st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
