@@ -81,7 +81,7 @@ if uploaded_file is not None:
         # Generate content
         response = model.generate_content([
             f"이 사진은 '{subject}' 주제의 스케치입니다. 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요.", 
-            img
+            f"사진 분석 결과: {img}"
         ])
 
         # Resolve the response
