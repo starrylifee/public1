@@ -115,7 +115,7 @@ def generate_prompts(season, event):
     return base_prompts
 
 # 스트림릿 앱 인터페이스 구성
-st.title("✍️ 계절 주제 글감 생성기 ✍️")
+st.title("✍️ 이런 글 주제 어때요 ✍️")
 st.write("""
 1. 🌟 '글감 생성하기' 버튼을 클릭하세요.
 2. 📝 초등학생이 글짓기할 글감을 5개 출력합니다.
