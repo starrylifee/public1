@@ -75,11 +75,11 @@ def remove_html_tags(text):
 def simplify_text(text):
     prompt = f"다음 글을 초등학생이 이해하기 쉽게 요약해 주세요. 글은 2000자 쯤으로 작성해주세요.:\n\n{text}"
     model = genai.GenerativeModel(model_name="gemini-1.0-pro",
-                                  generation_config={
-                                      "temperature": 0.7,
-                                      "top_p": 0.9,
-                                      "max_output_tokens": 2000  # 글자 수를 제한하기 위해
-                                  })
+                                generation_config={
+                                    "temperature": 0.7,
+                                    "top_p": 0.9,
+                                    "max_output_tokens": 2000  # 글자 수를 제한하기 위해
+                                })
     try:
         response = model.generate_content([prompt])
         return response.text.strip()
