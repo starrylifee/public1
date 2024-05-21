@@ -75,20 +75,20 @@ if uploaded_file is not None:
         # bytes 타입의 이미지 데이터를 PIL.Image.Image 객체로 변환
         img = Image.open(io.BytesIO(img_bytes))
 
-        model = genai.GenerativeModel('gemini-pro-vision')
-
         # 이미지 분석 결과를 문자열로 처리
-        img_analysis = f"사진 분석 결과: 이 사진은 '{subject}' 주제의 스케치입니다."
+        img_analysis = f"이 사진은 '{subject}' 주제의 스케치입니다."
 
         # Generate content
-        response = model.generate_content([
-            f"이 사진은 '{subject}' 주제의 스케치입니다. 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요.",
-            img_analysis
-        ])
+        response = genai.generate_content(
+            model='gemini-pro-vision',
+            prompt=[
+                f"{img_analysis} 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요."
+            ]
+        )
 
         # 결과 표시
         st.image(img) # 업로드된 사진 출력
-        result_text = response.text  # 결과 텍스트
+        result_text = response['choices'][0]['text']  # 결과 텍스트
         st.markdown(result_text)
 
         # 텍스트 결과를 다운로드 가능한 텍스트 파일로 제공
