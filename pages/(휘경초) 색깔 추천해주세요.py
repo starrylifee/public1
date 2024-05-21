@@ -1,11 +1,11 @@
 import pathlib
 import textwrap
-import google.generativeai as genai
 import streamlit as st
 import toml
 from PIL import Image
 import io
 import random
+import google.generativeai as genai
 
 def to_markdown(text):
     text = text.replace('•', '*')
@@ -81,13 +81,11 @@ if uploaded_file is not None:
         # Generate content
         response = genai.generate_content(
             model='gemini-pro-vision',
-            prompt=[
-                f"{img_analysis} 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요."
-            ]
+            prompt=f"{img_analysis} 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요."
         )
 
         # 결과 표시
-        st.image(img) # 업로드된 사진 출력
+        st.image(img)  # 업로드된 사진 출력
         result_text = response['choices'][0]['text']  # 결과 텍스트
         st.markdown(result_text)
 
