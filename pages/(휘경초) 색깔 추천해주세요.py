@@ -1,18 +1,18 @@
 import pathlib
 import textwrap
+import google.generativeai as genai
 import streamlit as st
 import toml
 from PIL import Image
 import io
 import random
-import google.generativeai as genai
 
 def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
 # 사용방법 안내
-st.title("🎨 색깔 추천해주세요.")
+st.title("🎨 색깔 추천해주세요. ")
 st.write("""
 1. 📜 주제를 입력하세요.
 2. 📂 "Browse files"를 클릭합니다.
@@ -23,7 +23,7 @@ st.write("""
 7. 📥 결과와 이미지를 다운로드 해 봅시다.
 """)
 
-st.write("📢 이 앱은 서울휘경초등학교 3학년 1반 이서운, 조민혁 학생의 아이디어로 만들어졌습니다. 🎉👏")
+st.write("📢 이 앱은 원중초등학교 4학년 1반 경준희 학생의 아이디어로 만들어졌습니다. 🎉👏")
 
 # secrets.toml 파일 경로
 secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
@@ -60,6 +60,7 @@ if st.button("🔄 새로 시작하기 (눌러주세요!)"):
     st.session_state.clear()
     st.experimental_rerun()
 
+
 # 그림 주제 입력
 subject = st.text_input("무엇을 그린것인가요?:", "")
 
@@ -75,18 +76,20 @@ if uploaded_file is not None:
         # bytes 타입의 이미지 데이터를 PIL.Image.Image 객체로 변환
         img = Image.open(io.BytesIO(img_bytes))
 
-        # 이미지 분석 결과를 문자열로 처리
-        img_analysis = f"이 사진은 '{subject}' 주제의 스케치입니다."
+        model = genai.GenerativeModel('gemini-pro-vision')
 
         # Generate content
-        response = genai.generate_content(
-            model='gemini-pro-vision',
-            prompt=f"{img_analysis} 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요."
-        )
+        response = model.generate_content([
+            f"이 사진은 '{subject}' 주제의 스케치입니다. 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 어떤 부분에 어떤 색을 칠하면 좋을지 추천해주세요.", 
+            img
+        ])
+
+        # Resolve the response
+        response.resolve()
 
         # 결과 표시
-        st.image(img)  # 업로드된 사진 출력
-        result_text = response['choices'][0]['text']  # 결과 텍스트
+        st.image(img) # 업로드된 사진 출력
+        result_text = response.text  # 결과 텍스트
         st.markdown(result_text)
 
         # 텍스트 결과를 다운로드 가능한 텍스트 파일로 제공
