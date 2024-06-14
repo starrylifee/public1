@@ -37,7 +37,7 @@ if uploaded_file is not None:
   model = genai.GenerativeModel('gemini-pro-vision')
 
   # Generate content
-  response = model.generate_content(["이 사진은 동물의 사진입니다. 동물의 이름을 최대한 추측해서 판별해주세요. 동물의 모습과 습성, 서식지 등을 학생에게 설명하듯이 자세히 한글로 설명해 주세요.", img])
+  response = model.generate_content(["이 사진은 동물의 사진입니다. 동물의 이름을 최대한 추측해서 판별해주세요. 동물의 모습과 습성, 서식지 등을 학생에게 설명하듯이 자세히 한글로 설명해 주세요. 더불어 동물을 사랑하고 생명을 존중할 수 있도록 마지막에 이야기를 해주세요.", img])
 
   # Resolve the response
   response.resolve()
