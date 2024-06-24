@@ -5,3 +5,6 @@ google-generativeai
 beautifulsoup4
 requests
 toml
+python-dotenv
+langchain-teddynote
+langchain-openai
