@@ -19,9 +19,6 @@ hide_github_icon = """
 
 st.markdown(hide_github_icon, unsafe_allow_html=True)
 
-# 페이지 레이아웃 설정
-st.set_page_config(layout="wide")
-
 # OpenAI API 키 리스트
 openai_api_keys = [
     st.secrets["api_key1"],
