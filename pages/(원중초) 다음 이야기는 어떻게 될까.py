@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import io
 import random
 import google.generativeai as genai
@@ -135,7 +135,7 @@ def image_to_text(api_key, img, prompt):
     """
     genai.configure(api_key=api_key)
 
-    model = genai.GenerativeModel('gemini-pro-vision')
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
     # Generate content
     try:
@@ -186,24 +186,29 @@ image_description_prompt = st.text_area("그린 그림을 설명해주세요.:")
 
 if uploaded_file is not None:
     img_bytes = uploaded_file.read()
-    img = Image.open(io.BytesIO(img_bytes))
-    st.image(img, caption="업로드된 만화 컷")
+    try:
+        img = Image.open(io.BytesIO(img_bytes))
+        st.image(img, caption="업로드된 만화 컷")
 
-    if st.button("인공지능아, 다음 컷은 어떤 이야기가 나올 것 같아?"):
-        try:
-            # 업로드된 이미지 묘사 생성
-            img_description = image_to_text(selected_genai_api_key, img, image_description_prompt)
-            st.session_state['generated_image_description'] = img_description
-            
-            # 이미지 묘사 및 입력받은 이야기 기반으로 다음 컷 이야기 생성
-            story_prompt = [
-                f"이 만화의 첫 번째 컷입니다. 이미지 묘사는 다음과 같습니다: {img_description}. 전체 이야기는 다음과 같습니다: {story}. 주인공은 {main_character}입니다. 다음 만화 컷의 이야기를 상상해서 설명해 주세요. 구체적인 대화와 행동을 포함해 주세요."
-            ]
-            next_cut_story = try_generate_content(selected_genai_api_key, story_prompt)
-            st.session_state['generated_next_cut_story'] = next_cut_story
+        if st.button("인공지능아, 다음 컷은 어떤 이야기가 나올 것 같아?"):
+            with st.spinner("다음 컷 이야기를 생성중입니다. 잠시만 기다려주세요..."):
+                try:
+                    # 업로드된 이미지 묘사 생성
+                    img_description = image_to_text(selected_genai_api_key, img, image_description_prompt)
+                    st.session_state['generated_image_description'] = img_description
+                    
+                    # 이미지 묘사 및 입력받은 이야기 기반으로 다음 컷 이야기 생성
+                    story_prompt = [
+                        f"이 만화의 첫 번째 컷입니다. 이미지 묘사는 다음과 같습니다: {img_description}. 전체 이야기는 다음과 같습니다: {story}. 주인공은 {main_character}입니다. 다음 만화 컷의 이야기를 상상해서 설명해 주세요. 구체적인 대화와 행동을 포함해 주세요."
+                    ]
+                    next_cut_story = try_generate_content(selected_genai_api_key, story_prompt)
+                    st.session_state['generated_next_cut_story'] = next_cut_story
 
-        except Exception as e:
-            st.error(f"다음 컷 이야기 생성 중 오류가 발생했습니다: {e}")
+                except Exception as e:
+                    st.error(f"다음 컷 이야기 생성 중 오류가 발생했습니다: {e}")
+
+    except UnidentifiedImageError:
+        st.error("업로드된 파일이 유효한 이미지 파일이 아닙니다. 다른 파일을 업로드해 주세요.")
 
 # 이전 단계에서 생성된 이야기를 출력
 if st.session_state['generated_next_cut_story']:
@@ -211,13 +216,14 @@ if st.session_state['generated_next_cut_story']:
 
 if st.session_state['generated_next_cut_story']:
     if st.button("다음 그림을 그려주세요."):
-        try:
-            # 다음 컷 이미지 생성
-            generated_image_url = generate_image_from_prompt(st.session_state['generated_next_cut_story'], selected_openai_api_key)
-            st.session_state['generated_image_url'] = generated_image_url
+        with st.spinner("다음 컷 그림을 생성중입니다. 잠시만 기다려주세요..."):
+            try:
+                # 다음 컷 이미지 생성
+                generated_image_url = generate_image_from_prompt(st.session_state['generated_next_cut_story'], selected_openai_api_key)
+                st.session_state['generated_image_url'] = generated_image_url
 
-        except Exception as e:
-            st.error(f"다음 컷 그림 생성 중 오류가 발생했습니다: {e}")
+            except Exception as e:
+                st.error(f"다음 컷 그림 생성 중 오류가 발생했습니다: {e}")
 
 # 생성된 이미지를 다운로드 버튼 표시
 if st.session_state['generated_image_url']:

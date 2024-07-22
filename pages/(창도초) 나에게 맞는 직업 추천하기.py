@@ -114,36 +114,37 @@ if st.button("직업 추천 받기"):
         st.session_state['weaknesses'] = weaknesses
         st.session_state['mbti'] = mbti
 
-        # 프롬프트 구성
-        prompt_parts = [
-            "다음은 사용자에 대한 정보입니다. 이 정보를 바탕으로 추천 직업 5개와 이유를 제안해주세요.\n\n",
-            f"1. 좋아하는 활동: {', '.join(activities)}",
-            f"2. 나의 성격: {personality}",
-            f"3. 내가 자신 있는 것: {strengths}",
-            f"4. 내가 자신 없는 것: {weaknesses}",
-            f"5. MBTI: {mbti}",
-            "\n추천 직업 5개와 이유를 제안해주세요."
-        ]
+        with st.spinner("직업 추천을 생성 중입니다. 잠시만 기다려주세요..."):
+            # 프롬프트 구성
+            prompt_parts = [
+                "다음은 사용자에 대한 정보입니다. 이 정보를 바탕으로 추천 직업 5개와 이유를 제안해주세요.\n\n",
+                f"1. 좋아하는 활동: {', '.join(activities)}",
+                f"2. 나의 성격: {personality}",
+                f"3. 내가 자신 있는 것: {strengths}",
+                f"4. 내가 자신 없는 것: {weaknesses}",
+                f"5. MBTI: {mbti}",
+                "\n추천 직업 5개와 이유를 제안해주세요."
+            ]
 
-        # API 호출 시도
-        response_text = try_generate_content(selected_api_key, prompt_parts)
-        
-        # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
-        if response_text is None:
-            for api_key in api_keys:
-                if api_key != selected_api_key:
-                    response_text = try_generate_content(api_key, prompt_parts)
-                    if response_text is not None:
-                        break
-        
-        # 결과 출력
-        if response_text is not None:
-            st.success("직업 추천 완료!")
-            st.text_area("추천된 직업:", value=response_text, height=300)
-            st.download_button(label="직업 추천 다운로드", data=response_text, file_name="recommended_jobs.txt", mime="text/plain")
-            st.write("인공지능이 생성한 추천 직업을 꼭 본인이 확인하세요. 생성된 추천 직업을 검토하고, 필요한 경우 수정하세요.")
-        else:
-            st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
+            # API 호출 시도
+            response_text = try_generate_content(selected_api_key, prompt_parts)
+            
+            # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
+            if response_text is None:
+                for api_key in api_keys:
+                    if api_key != selected_api_key:
+                        response_text = try_generate_content(api_key, prompt_parts)
+                        if response_text is not None:
+                            break
+            
+            # 결과 출력
+            if response_text is not None:
+                st.success("직업 추천 완료!")
+                st.text_area("추천된 직업:", value=response_text, height=300)
+                st.download_button(label="직업 추천 다운로드", data=response_text, file_name="recommended_jobs.txt", mime="text/plain")
+                st.write("인공지능이 생성한 추천 직업을 꼭 본인이 확인하세요. 생성된 추천 직업을 검토하고, 필요한 경우 수정하세요.")
+            else:
+                st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):

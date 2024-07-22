@@ -87,7 +87,7 @@ def remove_html_tags(text):
 # OpenAI GPT 호출 함수
 def simplify_text(text):
     prompt = f"다음 글을 초등학생이 이해하기 쉽게 요약해 주세요. 글은 2000자 쯤으로 작성해주세요.:\n\n{text}"
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                 generation_config={
                                     "temperature": 0.7,
                                     "top_p": 0.9,
@@ -114,19 +114,18 @@ query = st.text_input("조사할 주제")
 
 if st.button("검색하기"):
     if query:
-        # 네이버 백과사전 검색
-        item = search_naver_encyclopedia(query)
-        if item:
-            st.write(f"### 제목: {remove_html_tags(item['title'])}")
-            st.write(f"#### 링크: [Link]({item['link']})")
-            original_text = remove_html_tags(item['description'])
-            st.write(f"#### 원본 내용: {original_text}")
-            # OpenAI GPT로 요약
-            simplified_text = simplify_text(original_text)
-            st.write("#### 쉽게 번역된 내용")
-            st.write(simplified_text)
-        else:
-            st.warning("검색 결과가 없습니다.")
+        with st.spinner("검색 중입니다. 잠시만 기다려주세요..."):
+            # 네이버 백과사전 검색
+            item = search_naver_encyclopedia(query)
+            if item:
+                original_text = remove_html_tags(item['description'])
+                # OpenAI GPT로 요약
+                simplified_text = simplify_text(original_text)
+                st.write("#### 쉽게 번역된 내용")
+                st.write(simplified_text)
+                st.write(f"더 자세히 알고 싶다면 [여기]( {item['link']})를 클릭하세요.")
+            else:
+                st.warning("검색 결과가 없습니다.")
     else:
         st.warning("조사할 주제를 입력해주세요!")
 

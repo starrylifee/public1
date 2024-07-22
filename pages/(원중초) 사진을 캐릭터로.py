@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import io
 import random
 import google.generativeai as genai
@@ -79,47 +79,51 @@ student_description = st.text_input("학생이 추가하고 싶은 묘사를 입
 # 이미지가 업로드되었는지 확인
 if uploaded_file is not None:
     img_bytes = uploaded_file.read()
-    img = Image.open(io.BytesIO(img_bytes))
-    st.image(img, caption="업로드된 이미지")
+    try:
+        img = Image.open(io.BytesIO(img_bytes))
+        st.image(img, caption="업로드된 이미지")
 
-    if st.button("묘사 생성 및 캐리커쳐 생성"):
-        try:
-            # Google Generative AI를 사용하여 이미지 묘사 생성
-            model = genai.GenerativeModel('gemini-pro-vision')
-            response = model.generate_content([
-                "이 사진을 자세히 묘사해주세요. 성별, 헤어스타일, 눈코입, 옷의 종류, 옷의 색깔, 옷의 무즤, 악세서리, 표정, 피부색, 얼굴형, 나이, 머리카락 길이, 눈색깔, 머리색깔 등을 다양한 수식어가 포함된 최대한 자세한 표현으로 이야기해주세요. 초등학생이 사용할 것이므로 성적인 묘사는 하지 말아주세요.", 
-                img
-            ])
-            response.resolve()
-            ai_description = response.text
-            st.write("AI가 생성한 이미지 묘사: ", ai_description)
-            st.markdown("<h2 style='color:red; font-weight:bold;'>오른쪽 위 'Running'이 없어질 때까지 기다려 주세요.</h2>", unsafe_allow_html=True)
-            # 최종 묘사 생성
-            final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}. 귀엽게 그려주세요."
+        if st.button("묘사 생성 및 캐리커쳐 생성"):
+            with st.spinner("묘사 생성 및 캐리커쳐 생성 중입니다. 잠시만 기다려주세요..."):
+                try:
+                    # Google Generative AI를 사용하여 이미지 묘사 생성
+                    model = genai.GenerativeModel('gemini-1.5-flash')
+                    response = model.generate_content([
+                        "이 사진을 자세히 묘사해주세요. 성별, 헤어스타일, 눈코입, 옷의 종류, 옷의 색깔, 옷의 무늬, 악세서리, 표정, 피부색, 얼굴형, 나이, 머리카락 길이, 눈색깔, 머리색깔 등을 다양한 수식어가 포함된 최대한 자세한 표현으로 이야기해주세요. 초등학생이 사용할 것이므로 성적인 묘사는 하지 말아주세요.", 
+                        img
+                    ])
+                    response.resolve()
+                    ai_description = response.text
+                    st.write("AI가 생성한 이미지 묘사: ", ai_description)
+                    
+                    # 최종 묘사 생성
+                    final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}. 귀엽게 그려주세요."
 
-            # OpenAI API를 호출하여 이미지 생성
-            image_response = client.images.generate(
-                model="dall-e-3",
-                prompt=f"Caricature of the person: {final_description}",
-                size="1024x1024",
-                quality="standard",
-                n=1
-            )
+                    # OpenAI API를 호출하여 이미지 생성
+                    image_response = client.images.generate(
+                        model="dall-e-3",
+                        prompt=f"Caricature of the person: {final_description}",
+                        size="1024x1024",
+                        quality="standard",
+                        n=1
+                    )
 
-            # 생성된 이미지 표시
-            generated_image_url = image_response.data[0].url
-            st.image(generated_image_url, caption="생성된 캐리커쳐")
+                    # 생성된 이미지 표시
+                    generated_image_url = image_response.data[0].url
+                    st.image(generated_image_url, caption="생성된 캐리커쳐")
 
-            # 이미지 다운로드 준비
-            response = requests.get(generated_image_url)
-            image_bytes = io.BytesIO(response.content)
+                    # 이미지 다운로드 준비
+                    response = requests.get(generated_image_url)
+                    image_bytes = io.BytesIO(response.content)
 
-            # 이미지 다운로드 버튼
-            st.download_button(label="이미지 다운로드",
-                               data=image_bytes,
-                               file_name="caricature.jpg",
-                               mime="image/jpeg")
-        except Exception as e:
-            st.error(f"이미지 생성 중 오류가 발생했습니다: {e}")
+                    # 이미지 다운로드 버튼
+                    st.download_button(label="이미지 다운로드",
+                                       data=image_bytes,
+                                       file_name="caricature.jpg",
+                                       mime="image/jpeg")
+                except Exception as e:
+                    st.error(f"이미지 생성 중 오류가 발생했습니다: {e}")
+    except UnidentifiedImageError:
+        st.error("업로드된 파일이 유효한 이미지 파일이 아닙니다. 다른 파일을 업로드해 주세요.")
 else:
     st.markdown("📱 핸드폰 사진을 업로드하세요.")

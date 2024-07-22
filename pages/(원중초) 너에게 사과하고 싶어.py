@@ -41,7 +41,7 @@ api_keys = [
     secrets.get("gemini_api_key12")
 ]
 
-# 랜덤하게 API 키를 선택하여 OpenAI 클라이언트 초기화
+# 랜덤하게 API 키를 선택하여 초기화
 selected_api_key = random.choice(api_keys)
 
 # few-shot 프롬프트 구성 함수
@@ -50,7 +50,7 @@ def try_generate_content(api_key, prompt_parts):
     genai.configure(api_key=api_key)
     
     # 설정된 모델 변경
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                   generation_config={
                                       "temperature": 0.9,
                                       "top_p": 1,
@@ -101,40 +101,41 @@ if st.button("편지 생성하기"):
     if not all([incident, reason, thoughts, harm, recovery, improvements, actions, future_relation, feelings]):
         st.warning("모든 질문에 답을 작성해주세요!")
     else:
-        # 프롬프트 구성
-        prompt_parts = [
-            "다음 질문들에 대한 답변을 바탕으로 타인의 마음을 고려한 편지를 작성해주세요.\n\n",
-            f"1. 무슨 일이 있었나요? {incident}",
-            f"2. 왜 이런 일이 일어났다고 생각하나요? {reason}",
-            f"3. 그때 어떤 생각으로 그런 행동을 했나요? {thoughts}",
-            f"4. 그 사람에게 어떤 피해가 있었나요? {harm}",
-            f"5. 어떻게 하면 발생한 피해가 회복될 수 있을까요? {recovery}",
-            f"6. 무엇을 하는 것이 이 상황을 좀 더 좋게 만들 수 있을까요? {improvements}",
-            f"7. 내가 할 수 있는 일은 무엇인가요? {actions}",
-            f"8. 앞으로 그 사람과 어떤 관계가 되고 싶나요? {future_relation}",
-            f"9. 이 일을 겪으면서 느낀 점은 무엇인가요? {feelings}",
-            "\n이 답변들을 바탕으로 진심을 담아 편지를 작성해주세요."
-        ]
+        with st.spinner("편지를 생성중입니다. 잠시만 기다려주세요..."):
+            # 프롬프트 구성
+            prompt_parts = [
+                "다음 질문들에 대한 답변을 바탕으로 타인의 마음을 고려한 편지를 작성해주세요.\n\n",
+                f"1. 무슨 일이 있었나요? {incident}",
+                f"2. 왜 이런 일이 일어났다고 생각하나요? {reason}",
+                f"3. 그때 어떤 생각으로 그런 행동을 했나요? {thoughts}",
+                f"4. 그 사람에게 어떤 피해가 있었나요? {harm}",
+                f"5. 어떻게 하면 발생한 피해가 회복될 수 있을까요? {recovery}",
+                f"6. 무엇을 하는 것이 이 상황을 좀 더 좋게 만들 수 있을까요? {improvements}",
+                f"7. 내가 할 수 있는 일은 무엇인가요? {actions}",
+                f"8. 앞으로 그 사람과 어떤 관계가 되고 싶나요? {future_relation}",
+                f"9. 이 일을 겪으면서 느낀 점은 무엇인가요? {feelings}",
+                "\n이 답변들을 바탕으로 진심을 담아 편지를 작성해주세요."
+            ]
 
-        # API 호출 시도
-        response_text = try_generate_content(selected_api_key, prompt_parts)
-        
-        # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
-        if response_text is None:
-            for api_key in api_keys:
-                if api_key != selected_api_key:
-                    response_text = try_generate_content(api_key, prompt_parts)
-                    if response_text is not None:
-                        break
-        
-        # 결과 출력
-        if response_text is not None:
-            st.success("편지 생성 완료!")
-            st.text_area("생성된 편지:", value=response_text, height=300)
-            st.download_button(label="편지 다운로드", data=response_text, file_name="generated_letter.txt", mime="text/plain")
-            st.write("인공지능이 생성한 편지는 꼭 본인이 확인해야 합니다. 생성된 편지를 검토하고, 필요한 경우 수정하세요.")
-        else:
-            st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
+            # API 호출 시도
+            response_text = try_generate_content(selected_api_key, prompt_parts)
+            
+            # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
+            if response_text is None:
+                for api_key in api_keys:
+                    if api_key != selected_api_key:
+                        response_text = try_generate_content(api_key, prompt_parts)
+                        if response_text is not None:
+                            break
+            
+            # 결과 출력
+            if response_text is not None:
+                st.success("편지 생성 완료!")
+                st.text_area("생성된 편지:", value=response_text, height=300)
+                st.download_button(label="편지 다운로드", data=response_text, file_name="generated_letter.txt", mime="text/plain")
+                st.write("인공지능이 생성한 편지는 꼭 본인이 확인해야 합니다. 생성된 편지를 검토하고, 필요한 경우 수정하세요.")
+            else:
+                st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):

@@ -73,7 +73,6 @@ if st.button("🔄 새로 시작하기 (눌러주세요!)"):
     st.session_state.clear()
     st.experimental_rerun()
 
-
 # 그림 주제 입력
 subject = st.text_input("그림 주제를 입력하세요:", "")
 
@@ -89,37 +88,38 @@ if uploaded_file is not None:
         # bytes 타입의 이미지 데이터를 PIL.Image.Image 객체로 변환
         img = Image.open(io.BytesIO(img_bytes))
 
-        model = genai.GenerativeModel('gemini-pro-vision')
+        with st.spinner('AI가 스케치를 분석 중입니다...'):
+            model = genai.GenerativeModel('gemini-1.5-flash')
 
-        # Generate content
-        response = model.generate_content([
-            f"이 사진은 '{subject}' 주제의 스케치입니다. 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 더 좋은 그림을 위해 학생이 보강하면 좋은 부분을 안내해주세요. 또 그려진 스케치에 대한 칭찬도 해주세요.", 
-            img
-        ])
+            # Generate content
+            response = model.generate_content([
+                f"이 사진은 '{subject}' 주제의 스케치입니다. 초등학생에게 말하는 수준으로 이야기해주세요. '{subject}' 주제와 스케치를 살펴보고 더 좋은 그림을 위해 학생이 보강하면 좋은 부분을 안내해주세요. 또 그려진 스케치에 대한 칭찬도 해주세요.", 
+                img
+            ])
 
-        # Resolve the response
-        response.resolve()
+            # Resolve the response
+            response.resolve()
 
-        # 결과 표시
-        st.image(img) # 업로드된 사진 출력
-        result_text = response.text  # 결과 텍스트
-        st.markdown(result_text)
+            # 결과 표시
+            st.image(img) # 업로드된 사진 출력
+            result_text = response.text  # 결과 텍스트
+            st.markdown(result_text)
 
-        # 텍스트 결과를 다운로드 가능한 텍스트 파일로 제공
-        txt_to_download = result_text.encode('utf-8')
-        st.download_button(label="📄 결과를 다운로드하세요.",
-                           data=txt_to_download,
-                           file_name="sketch_analysis.txt",
-                           mime='text/plain')
+            # 텍스트 결과를 다운로드 가능한 텍스트 파일로 제공
+            txt_to_download = result_text.encode('utf-8')
+            st.download_button(label="📄 결과를 다운로드하세요.",
+                               data=txt_to_download,
+                               file_name="sketch_analysis.txt",
+                               mime='text/plain')
 
-        # 이미지 다운로드
-        img_bytes_io = io.BytesIO()
-        img.save(img_bytes_io, format='JPEG')
-        img_bytes_io.seek(0)
-        st.download_button(label="🖼️ 이미지 다운로드",
-                           data=img_bytes_io,
-                           file_name="uploaded_sketch.jpg",
-                           mime="image/jpeg")
+            # 이미지 다운로드
+            img_bytes_io = io.BytesIO()
+            img.save(img_bytes_io, format='JPEG')
+            img_bytes_io.seek(0)
+            st.download_button(label="🖼️ 이미지 다운로드",
+                               data=img_bytes_io,
+                               file_name="uploaded_sketch.jpg",
+                               mime="image/jpeg")
     else:
         st.warning("먼저 그림 주제를 입력하세요.")
 else:

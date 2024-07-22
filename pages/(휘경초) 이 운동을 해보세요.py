@@ -50,7 +50,7 @@ def try_generate_content(api_key, prompt_parts):
     genai.configure(api_key=api_key)
     
     # 설정된 모델 변경
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                   generation_config={
                                       "temperature": 0.9,
                                       "top_p": 1,
@@ -102,16 +102,17 @@ if st.button("운동 추천 받기"):
             "추천 운동: "
         ]
 
-        # API 호출 시도
-        response_text = try_generate_content(selected_api_key, prompt_parts)
+        with st.spinner('AI가 운동을 추천 중입니다...'):
+            # API 호출 시도
+            response_text = try_generate_content(selected_api_key, prompt_parts)
         
-        # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
-        if response_text is None:
-            for api_key in api_keys:
-                if api_key != selected_api_key:
-                    response_text = try_generate_content(api_key, prompt_parts)
-                    if response_text is not None:
-                        break
+            # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
+            if response_text is None:
+                for api_key in api_keys:
+                    if api_key != selected_api_key:
+                        response_text = try_generate_content(api_key, prompt_parts)
+                        if response_text is not None:
+                            break
         
         # 결과 출력
         if response_text is not None:

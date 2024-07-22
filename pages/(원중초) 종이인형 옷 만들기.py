@@ -81,31 +81,32 @@ if generate_button:
         f"Please include tabs for attachment to a paper doll."
     )
 
-    try:
-        # OpenAI 객체 생성 및 API 키 제공
-        client = OpenAI(api_key=selected_api_key)
+    with st.spinner("종이 인형 옷을 생성중입니다. 잠시만 기다려주세요..."):
+        try:
+            # OpenAI 객체 생성 및 API 키 제공
+            client = OpenAI(api_key=selected_api_key)
 
-        # OpenAI API를 호출하여 이미지 생성
-        image_response = client.images.generate(
-            model="dall-e-3",
-            prompt=prompt,
-            size="1024x1024",
-            quality="standard",
-            n=1
-        )
+            # OpenAI API를 호출하여 이미지 생성
+            image_response = client.images.generate(
+                model="dall-e-3",
+                prompt=prompt,
+                size="1024x1024",
+                quality="standard",
+                n=1
+            )
 
-        # 생성된 이미지 표시
-        generated_image_url = image_response.data[0].url
-        st.image(generated_image_url, caption=f"{outfit_type} 옷")
+            # 생성된 이미지 표시
+            generated_image_url = image_response.data[0].url
+            st.image(generated_image_url, caption=f"{outfit_type} 옷")
 
-        # 이미지 다운로드 준비
-        response = requests.get(generated_image_url)
-        image_bytes = BytesIO(response.content)
+            # 이미지 다운로드 준비
+            response = requests.get(generated_image_url)
+            image_bytes = BytesIO(response.content)
 
-        # 이미지 다운로드 버튼
-        st.download_button(label="이미지 다운로드",
-                           data=image_bytes,
-                           file_name=f"{outfit_type}_outfit.png",
-                           mime="image/png")
-    except Exception as e:
-        st.error(f"현재 사용 중인 키로 오류가 발생했습니다: {e}")
+            # 이미지 다운로드 버튼
+            st.download_button(label="이미지 다운로드",
+                               data=image_bytes,
+                               file_name=f"{outfit_type}_outfit.png",
+                               mime="image/png")
+        except Exception as e:
+            st.error(f"현재 사용 중인 키로 오류가 발생했습니다: {e}")

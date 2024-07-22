@@ -50,7 +50,7 @@ def try_generate_content(api_key, prompt_parts):
     genai.configure(api_key=api_key)
     
     # 설정된 모델 변경
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                   generation_config={
                                       "temperature": 0.9,
                                       "top_p": 1,
@@ -103,33 +103,34 @@ if st.button("개선 사항 생성하기"):
         st.session_state['assignment'] = assignment
         st.session_state['your_writing'] = your_writing
 
-        # 프롬프트 구성
-        prompt_parts = [
-            "다음은 선생님이 내주신 과제와 내가 쓴 글입니다. 이를 바탕으로 더 조사해야 할 점과 더 적어야 할 점을 제안해주세요.\n\n",
-            f"1. 선생님이 내주신 과제: {assignment}",
-            f"2. 내가 쓴 글: {your_writing}",
-            "\n더 조사해야 할 점과 더 적어야 할 점을 제안해주세요."
-        ]
+        with st.spinner("개선 사항을 생성 중입니다. 잠시만 기다려주세요..."):
+            # 프롬프트 구성
+            prompt_parts = [
+                "다음은 선생님이 내주신 과제와 내가 쓴 글입니다. 이를 바탕으로 더 조사해야 할 점과 더 적어야 할 점을 제안해주세요.\n\n",
+                f"1. 선생님이 내주신 과제: {assignment}",
+                f"2. 내가 쓴 글: {your_writing}",
+                "\n더 조사해야 할 점과 더 적어야 할 점을 제안해주세요."
+            ]
 
-        # API 호출 시도
-        response_text = try_generate_content(selected_api_key, prompt_parts)
-        
-        # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
-        if response_text is None:
-            for api_key in api_keys:
-                if api_key != selected_api_key:
-                    response_text = try_generate_content(api_key, prompt_parts)
-                    if response_text is not None:
-                        break
-        
-        # 결과 출력
-        if response_text is not None:
-            st.success("개선 사항 생성 완료!")
-            st.text_area("생성된 개선 사항:", value=response_text, height=300)
-            st.download_button(label="개선 사항 다운로드", data=response_text, file_name="improvement_suggestions.txt", mime="text/plain")
-            st.write("인공지능이 생성한 제안은 꼭 본인이 확인해야 합니다. 생성된 제안을 검토하고, 필요한 경우에만 수정하세요.")
-        else:
-            st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
+            # API 호출 시도
+            response_text = try_generate_content(selected_api_key, prompt_parts)
+            
+            # 첫 번째 API 키 실패 시, 다른 API 키로 재시도
+            if response_text is None:
+                for api_key in api_keys:
+                    if api_key != selected_api_key:
+                        response_text = try_generate_content(api_key, prompt_parts)
+                        if response_text is not None:
+                            break
+            
+            # 결과 출력
+            if response_text is not None:
+                st.success("개선 사항 생성 완료!")
+                st.text_area("생성된 개선 사항:", value=response_text, height=300)
+                st.download_button(label="개선 사항 다운로드", data=response_text, file_name="improvement_suggestions.txt", mime="text/plain")
+                st.write("인공지능이 생성한 제안은 꼭 본인이 확인해야 합니다. 생성된 제안을 검토하고, 필요한 경우에만 수정하세요.")
+            else:
+                st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):

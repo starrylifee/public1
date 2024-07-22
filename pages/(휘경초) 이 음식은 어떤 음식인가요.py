@@ -36,7 +36,6 @@ st.write("""
 """)
 st.write("📢 이 앱은 서울휘경초등학교 3학년 1반 박태이 학생의 아이디어로 만들어졌습니다. 🎉👏")
 
-
 # secrets.toml 파일 경로
 secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
 
@@ -78,13 +77,14 @@ if uploaded_file is not None:
     # bytes 타입의 이미지 데이터를 PIL.Image.Image 객체로 변환
     img = Image.open(io.BytesIO(img_bytes))
 
-    model = genai.GenerativeModel('gemini-pro-vision')
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
-    # Generate content
-    response = model.generate_content(["이 사진은 음식입니다. 초등학생에게 말하는 수준으로 이 음식의 영양소를 안내해주고, 알레르기 정보를 알려주세요. 과잉 섭취에 대한 경고와 특정 질병과의 연관성도 안내해주세요. 또한, 이 음식의 역사나 기원에 대해서도 설명해주세요.", img])
+    with st.spinner('AI가 음식 정보를 생성 중입니다...'):
+        # Generate content
+        response = model.generate_content(["이 사진은 음식입니다. 초등학생에게 말하는 수준으로 이 음식의 영양소를 안내해주고, 알레르기 정보를 알려주세요. 과잉 섭취에 대한 경고와 특정 질병과의 연관성도 안내해주세요. 또한, 이 음식의 역사나 기원에 대해서도 설명해주세요.", img])
 
-    # Resolve the response
-    response.resolve()
+        # Resolve the response
+        response.resolve()
 
     # 결과 표시
     st.image(img) # 업로드된 사진 출력

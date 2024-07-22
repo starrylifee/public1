@@ -56,33 +56,34 @@ if generate_button and all([name, gender, likes_items, likes_people, aspiration,
     # 이미지 생성 프롬프트
     prompt = f"{gender} 아이의 중앙 일러스트레이션과 주변에 좋아하는 물건({likes_items}), 좋아하는 사람({likes_people}), 장래 희망({aspiration}), 지금 하고 싶은 것({want_to_do}), 좋아하는 음식({favorite_food}), 좋아하는 나라({favorite_country})을 둘러싼 타로 카드 디자인. 카드 하단에 '{name}'이라는 이름이 크게 표시됩니다."
 
-    try:
-        # OpenAI 객체 생성 및 API 키 제공
-        client = OpenAI(api_key=selected_api_key)
+    with st.spinner("타로 카드를 생성중입니다. 잠시만 기다려주세요..."):
+        try:
+            # OpenAI 객체 생성 및 API 키 제공
+            client = OpenAI(api_key=selected_api_key)
 
-        # OpenAI API를 호출하여 이미지 생성
-        image_response = client.images.generate(
-            model="dall-e-3",
-            prompt=prompt,
-            size="1024x1792",
-            quality="standard",
-            n=1
-        )
+            # OpenAI API를 호출하여 이미지 생성
+            image_response = client.images.generate(
+                model="dall-e-3",
+                prompt=prompt,
+                size="1024x1792",
+                quality="standard",
+                n=1
+            )
 
-        # 생성된 이미지 표시
-        generated_image_url = image_response.data[0].url
-        st.image(generated_image_url, caption=f"{name}의 타로 카드")
+            # 생성된 이미지 표시
+            generated_image_url = image_response.data[0].url
+            st.image(generated_image_url, caption=f"{name}의 타로 카드")
 
-        # 이미지 다운로드 준비
-        response = requests.get(generated_image_url)
-        image_bytes = BytesIO(response.content)
+            # 이미지 다운로드 준비
+            response = requests.get(generated_image_url)
+            image_bytes = BytesIO(response.content)
 
-        # 이미지 다운로드 버튼
-        st.download_button(label="이미지 다운로드",
-                            data=image_bytes,
-                            file_name=f"{name}_tarot_card.jpg",
-                            mime="image/jpeg")
-    except Exception as e:
-        st.error("현재 사용 중인 키로 오류가 발생했습니다. " + str(e))
+            # 이미지 다운로드 버튼
+            st.download_button(label="이미지 다운로드",
+                                data=image_bytes,
+                                file_name=f"{name}_tarot_card.jpg",
+                                mime="image/jpeg")
+        except Exception as e:
+            st.error("현재 사용 중인 키로 오류가 발생했습니다. " + str(e))
 else:
     st.warning("모든 필드를 채워주세요!")
