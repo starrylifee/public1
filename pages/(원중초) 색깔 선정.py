@@ -115,6 +115,7 @@ if uploaded_file is not None:
 
                 # 이미지 다운로드
                 img_bytes_io = io.BytesIO()
+                img = img.convert("RGB")  # 팔레트 모드를 RGB 모드로 변환
                 img.save(img_bytes_io, format='JPEG')
                 img_bytes_io.seek(0)
                 st.download_button(label="🖼️ 이미지 다운로드",
