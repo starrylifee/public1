@@ -55,7 +55,7 @@ def main():
     # 초기화 조건 수정
     if "initialized" not in st.session_state:
         st.session_state.thread_id = ""  # 스레드 ID 초기화
-        st.session_state.messages = [{"role": "assistant", "content": "안녕하세요! 저는 서울특별시교육청의 학적업무 도움자료를 바탕으로 개발된 교육 지원 챗봇입니다. 왼쪽의 '대화 시작' 버튼을 눌러 학적 관련 질문을 해주세요. 어떤 정보를 도와드릴까요?"}]  # 초기 메시지 설정
+        st.session_state.messages = [{"role": "assistant", "content": "안녕하세요! 저는 서울특별시교육청의 학적업무 도움자료를 바탕으로 개발된 교육 지원 챗봇입니다. 어떤 정보를 도와드릴까요?"}]  # 초기 메시지 설정
         st.session_state.initialized = True
 
     # secrets.toml 파일 경로
