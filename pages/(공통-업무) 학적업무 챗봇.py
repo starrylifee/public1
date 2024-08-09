@@ -88,18 +88,17 @@ def main():
     selected_api_key = random.choice(api_keys)
     client = OpenAI(api_key=selected_api_key)
 
-    with st.sidebar:
-        # 스레드 ID 관리
-        thread_btn = st.button("대화 시작")
-        if thread_btn:
-            try:
-                thread = client.beta.threads.create()
-                st.session_state.thread_id = thread.id  # 스레드 ID를 session_state에 저장
-                st.success("대화가 시작되었습니다!")
-            except Exception as e:
-                st.error("대화 시작에 실패했습니다. 다시 시도해주세요.")
-                st.error(str(e))
+    # 스레드 자동 생성 및 관리
+    if "thread_id" not in st.session_state or not st.session_state.thread_id:
+        try:
+            thread = client.beta.threads.create()
+            st.session_state.thread_id = thread.id  # 스레드 ID를 session_state에 저장
+            st.sidebar.success("자동으로 대화가 시작되었습니다!")
+        except Exception as e:
+            st.sidebar.error("자동 대화 시작에 실패했습니다. 다시 시도해주세요.")
+            st.sidebar.error(str(e))
 
+    with st.sidebar:
         st.divider()
         if "show_examples" not in st.session_state:
             st.session_state.show_examples = True
@@ -119,7 +118,7 @@ def main():
 
     if prompt := st.chat_input():
         if not thread_id:
-            st.error("왼쪽의 대화 시작 버튼을 눌러주세요.")
+            st.error("대화 시작에 문제가 발생했습니다. 페이지를 새로고침 해주세요.")
             st.stop()
 
         st.session_state.messages.append({"role": "user", "content": prompt})
