@@ -2,8 +2,21 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 
+hide_github_icon = """
+    <style>
+    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
+    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
+    .viewerBadge_text__1JaDK{ display: none; }
+    #MainMenu{ visibility: hidden; }
+    footer { visibility: hidden; }
+    header { visibility: hidden; }
+    </style>
+"""
+
+st.markdown(hide_github_icon, unsafe_allow_html=True)
+
 # Streamlit 앱 제목
-st.title("Image RGB Average Calculator")
+st.title("이미지분석기")
 
 # 이미지 업로드 위젯
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
