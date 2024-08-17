@@ -6,3 +6,5 @@ beautifulsoup4
 requests
 toml
 numpy
+matplotlib
+pandas
