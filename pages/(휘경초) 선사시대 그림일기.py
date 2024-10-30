@@ -71,7 +71,7 @@ if st.button("글 분석 및 일기와 그림 생성"):
                     model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant."},
-                        {"role": "user", "content": f"학생이 작성한 글: {student_text}. 이 글에서 {selected_era} 시대와 관련된 내용이 옳은지 판단해 주세요. 잘못된 부분이 있다면 수정하거나 설명해 주세요."}
+                        {"role": "user", "content": f"학생이 작성한 글: {student_text}. 이 글에서 {selected_era} 시대와 관련된 내용이 역사적 사실과 비교해서 옳은지 틀린지 초등학교 3학년 수준에서 유연하게 판단해 주세요. 너무 엄격하지 않도록 해주세요. 가능하면 칭찬을 넣어주세요. 역사적 사실에서 잘못된 부분이 있다면 수정하거나 설명해 주세요."}
                     ]
                 )
                 ai_feedback = completion.choices[0].message.content.strip()
@@ -82,7 +82,7 @@ if st.button("글 분석 및 일기와 그림 생성"):
                     model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant."},
-                        {"role": "user", "content": f"위의 AI 피드백을 바탕으로 학생이 글을 수정해야 하는지, 아니면 통과할 수 있는지를 '수정' 또는 '통과'로만 간단하게 알려주세요. 너무 깐깐하게 평가하지 말아주세요. 피드백: {ai_feedback}"}
+                        {"role": "user", "content": f"위의 AI 피드백을 바탕으로 학생이 글을 수정해야 하는지, 아니면 통과할 수 있는지를 '수정' 또는 '통과'로만 간단하게 알려주세요. 학생 초등학교 3학년 수준으로 평가하고 엄격하지 않도록 해주세요. 피드백: {ai_feedback}"}
                     ]
                 )
                 review_feedback = completion_review.choices[0].message.content.strip()
@@ -108,7 +108,7 @@ if st.button("글 분석 및 일기와 그림 생성"):
                         st.write("AI가 생성한 일기: ", journal_text)
 
                         # 그림 생성 프롬프트
-                        final_description = f"{student_text}. 이 내용을 바탕으로 {selected_era} 시대 사람들의 생활을 묘사한 그림을 그려주세요."
+                        final_description = f"{student_text}. 이 내용을 묘사한 그림을 그려주세요."
 
                         # OpenAI API를 호출하여 이미지 생성
                         image_response = client.images.generate(
