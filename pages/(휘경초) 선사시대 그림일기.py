@@ -82,11 +82,12 @@ if st.button("글 분석 및 일기와 그림 생성"):
                     model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant."},
-                        {"role": "user", "content": f"위의 AI 피드백을 바탕으로 학생이 글을 수정해야 하는지, 아니면 통과할 수 있는지를 '수정' 또는 '통과'로만 간단하게 알려주세요. 피드백: {ai_feedback}"}
+                        {"role": "user", "content": f"위의 AI 피드백을 바탕으로 학생이 글을 수정해야 하는지, 아니면 통과할 수 있는지를 '수정' 또는 '통과'로만 간단하게 알려주세요. 너무 깐깐하게 평가하지 말아주세요. 피드백: {ai_feedback}"}
                     ]
                 )
                 review_feedback = completion_review.choices[0].message.content.strip()
 
+                st.write(review_feedback)
                 # AI의 판단에 따라 수정 요청 또는 다음 단계 진행
                 if review_feedback == "수정":
                     st.warning("⚠️ AI가 지적한 부분을 수정한 후 다시 시도해 주세요.")
