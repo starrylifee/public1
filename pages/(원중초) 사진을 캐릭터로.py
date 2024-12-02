@@ -97,7 +97,12 @@ if uploaded_file is not None:
                     st.write("AI가 생성한 이미지 묘사: ", ai_description)
                     
                     # 최종 묘사 생성
-                    final_description = f"{ai_description}. 학생이 추가한 묘사: {student_description}. 귀엽게 그려주세요."
+                    final_description = (
+                        f"이 캐리커쳐는 학생이 추가한 세부 사항을 반드시 포함해야 합니다. "
+                        f"학생 요청: {student_description.strip()}. "
+                        f"이 요청을 중심으로 AI가 생성한 다음 내용을 보완하세요: {ai_description}. "
+                        f"최종 결과는 초등학생이 즐길 수 있는 스타일로, 학생 요청을 최우선으로 반영한 캐리커쳐입니다."
+                    )
 
                     # OpenAI API를 호출하여 이미지 생성
                     image_response = client.images.generate(
