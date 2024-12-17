@@ -91,7 +91,7 @@ if uploaded_file is not None:
         img = Image.open(io.BytesIO(img_bytes))
         st.image(img, caption="업로드된 이미지")
 
-        if st.button("묘사 생성 및 변환"):
+        if st.button("과거로 타임머신!"):
             with st.spinner("이미지를 선택한 시대에 맞게 변환 중입니다. 잠시만 기다려주세요..."):
                 try:
                     # Google Generative AI를 사용해 이미지 묘사 생성
