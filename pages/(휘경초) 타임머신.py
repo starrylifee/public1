@@ -91,7 +91,7 @@ if uploaded_file is not None:
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     response = model.generate_content([
                         f"이 사진에 나타난 모습이 {selected_era} 시대로 바뀐다고 상상했을 때 의상, 배경, 도구, 문화 등에 맞게 {selected_era} 시기에 해당하는 내용으로 사실적으로 묘사해주세요. "
-                        "인물의 의상, 배경에 해당 시대의 주요 특징이 반영되어야 합니다. ",
+                        "인물의 의상, 배경에 해당 시대의 주요 특징이 반영되어야 합니다.",
                         img
                     ])
                     response.resolve()
@@ -100,11 +100,12 @@ if uploaded_file is not None:
                     
                     # 최종 묘사 생성
                     final_description = (
-                        f"{selected_era} 시대의 사실적 스타일로 이 사진을 변환하세요. "
-                        f"학생 요청: {student_description.strip()}. "
-                        f"AI 설명: {ai_description}. "
-                        "시대적 배경, 의상, 도구, 문화 요소를 모두 포함한 사실적이고 정확한 이미지를 생성해주세요."
+                        f"Transform this photo into the {selected_era} era. "
+                        f"Include {selected_era} era accurate tools, clothing made of fur or textiles, "
+                        f"appropriate natural backgrounds like forests or plains, and no modern elements such as buildings, electronics, or machines. "
+                        f"Student request: {student_description.strip()}. Ensure the depiction aligns strictly with historical accuracy."
                     )
+
 
                     # OpenAI API 호출
                     image_response = client.images.generate(
