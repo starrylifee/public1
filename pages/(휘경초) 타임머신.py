@@ -70,7 +70,16 @@ st.write("""
 """)
 
 # 시대 선택 라디오 버튼
-selected_era = st.radio("시대 선택:", ["구석기", "신석기", "청동기", "철기"], index=0)
+era_mapping = {
+    "구석기": "Paleolithic",
+    "신석기": "Neolithic",
+    "청동기": "Bronze Age",
+    "철기": "Iron Age"
+}
+
+selected_era_korean = st.radio("시대 선택:", ["구석기", "신석기", "청동기", "철기"], index=0)
+selected_era = era_mapping[selected_era_korean]
+
 
 # 업로드된 이미지 처리
 uploaded_file = st.file_uploader("📸 사진 업로드")
