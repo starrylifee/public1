@@ -75,8 +75,6 @@ selected_era = st.radio("시대 선택:", ["구석기", "신석기", "청동기"
 # 업로드된 이미지 처리
 uploaded_file = st.file_uploader("📸 사진 업로드")
 
-# 추가 묘사 입력
-student_description = st.text_input("추가로 넣고 싶은 묘사를 입력하세요:", "")
 
 if uploaded_file is not None:
     img_bytes = uploaded_file.read()
@@ -90,7 +88,7 @@ if uploaded_file is not None:
                     # Google Generative AI를 사용해 이미지 묘사 생성
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     response = model.generate_content([
-                        f"이 사진에 나타난 모습이 {selected_era} 시대로 바뀐다고 상상했을 때 의상, 배경, 도구, 문화 등에 맞게 {selected_era} 시기에 해당하는 내용으로 사실적으로 묘사해주세요. 추가 요청: {student_description}",
+                        f"Imagine that the appearance in this photo is transformed into the {selected_era} era. Adjust the composition, perspective, clothing of the subjects, background, tools, and cultural elements to match the {selected_era} era in a realistic and historically accurate manner. ",
                         img
                     ])
                     response.resolve()
@@ -98,11 +96,11 @@ if uploaded_file is not None:
                     
                     # 최종 묘사 생성
                     final_description = (
+                        f"no modern elements such as buildings, electronics, or machines. "
                         f"Transform this photo into the {selected_era} era. "
                         f"AI Description: {ai_description}. "
                         f"Include {selected_era} era accurate tools, clothing made of fur or textiles, "
-                        f"appropriate natural backgrounds like forests or plains, and no modern elements such as buildings, electronics, or machines. "
-                        f"Student request: {student_description.strip()}. Ensure the depiction aligns strictly with historical accuracy."
+                        f"Ensure the depiction aligns strictly with historical accuracy."
                     )
 
                     # OpenAI API 호출
