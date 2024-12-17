@@ -90,27 +90,25 @@ if uploaded_file is not None:
                     # Google Generative AI를 사용해 이미지 묘사 생성
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     response = model.generate_content([
-                        f"이 사진에 나타난 모습이 {selected_era} 시대로 바뀐다고 상상했을 때 의상, 배경, 도구, 문화 등에 맞게 {selected_era} 시기에 해당하는 내용으로 사실적으로 묘사해주세요. "
-                        "인물의 의상, 배경에 해당 시대의 주요 특징이 반영되어야 합니다.",
+                        f"이 사진에 나타난 모습이 {selected_era} 시대로 바뀐다고 상상했을 때 의상, 배경, 도구, 문화 등에 맞게 {selected_era} 시기에 해당하는 내용으로 사실적으로 묘사해주세요. 추가 요청: {student_description}",
                         img
                     ])
                     response.resolve()
                     ai_description = response.text
-                    st.write(f"AI가 생성한 {selected_era} 시대 묘사: ", ai_description)
                     
                     # 최종 묘사 생성
                     final_description = (
                         f"Transform this photo into the {selected_era} era. "
+                        f"AI Description: {ai_description}. "
                         f"Include {selected_era} era accurate tools, clothing made of fur or textiles, "
                         f"appropriate natural backgrounds like forests or plains, and no modern elements such as buildings, electronics, or machines. "
                         f"Student request: {student_description.strip()}. Ensure the depiction aligns strictly with historical accuracy."
                     )
 
-
                     # OpenAI API 호출
                     image_response = client.images.generate(
                         model="dall-e-3",
-                        prompt=f"Photo transformed into {selected_era} era with: {final_description}",
+                        prompt=f"{final_description}",
                         size="1024x1024",
                         quality="standard",
                         n=1
